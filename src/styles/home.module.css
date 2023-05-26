@@ -1,0 +1,12 @@
+.cardLayout{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (min-width: 768px){
+    .cardLayout{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
