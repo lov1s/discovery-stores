@@ -4,5 +4,5 @@ export default interface IcoffeeStores{
     image_url: string,
     url: string,
     address: string,
-    neighbourhood: string
+    neighbourhood?: string
 }

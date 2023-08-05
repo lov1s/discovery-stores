@@ -9,10 +9,11 @@ import { useContext, useEffect, useState } from "react"
 import { StoreContext } from "@/store/store-context"
 import { isEmpty } from "@/utils"
 import useSWR from "swr"
-
+import {CoffeeStore, CoffeeStores, DestructorStore, StaticProps} from "@/interfaces/interfaces";
+import BackIcon from "@/assets/arrow_back.svg"
 export async function getStaticPaths() {
     const coffeeStores = await fetchCoffeeStores();
-    const paths = coffeeStores.map(coffeeStore => {
+    const paths = coffeeStores.map((coffeeStore: CoffeeStore) => {
         return {
             params: { id: coffeeStore.id.toString() }
         }
@@ -23,10 +24,10 @@ export async function getStaticPaths() {
         fallback: true
     }
 }
-export async function getStaticProps(staticProps) {
+export async function getStaticProps(staticProps: StaticProps) {
     const params = staticProps.params
     const coffeeStores = await fetchCoffeeStores();
-    const findCoffeStoreId = coffeeStores.find((coffeeStore) => {
+    const findCoffeStoreId = coffeeStores.find((coffeeStore: CoffeeStore) => {
         return coffeeStore.id.toString() === params.id
     })
     return {
@@ -35,7 +36,7 @@ export async function getStaticProps(staticProps) {
         }
     }
 }
-const CoffeeStore = (initialProps: { name: string, adress: string, neighbourhood: string, rating: number, image_url: string }) => {
+const CoffeeStore = (initialProps: CoffeeStore) => {
 
     const router = useRouter()
     const id = router.query.id
@@ -46,7 +47,7 @@ const CoffeeStore = (initialProps: { name: string, adress: string, neighbourhood
         state: { coffeeStores },
     } = useContext(StoreContext)
 
-    const handleCreateCoffeeStore = async (coffeeStore) => {
+    const handleCreateCoffeeStore = async (coffeeStore: CoffeeStore) => {
         try {
             const {
                 id,
@@ -78,7 +79,7 @@ const CoffeeStore = (initialProps: { name: string, adress: string, neighbourhood
     useEffect(() => {
         if (isEmpty(initialProps.coffeeStore)) {
             if (coffeeStores.length > 0) {
-                const coffeStoreFromContext = coffeeStores.find((coffeeStore) => {
+                const coffeStoreFromContext = coffeeStores.find((coffeeStore: CoffeeStore) => {
                     return coffeeStore.id.toString() === id
                 })
                 if (coffeStoreFromContext) {
@@ -89,15 +90,20 @@ const CoffeeStore = (initialProps: { name: string, adress: string, neighbourhood
             }
         } else {
             //SSG
-            handleCreateCoffeeStore(initialProps.coffeeStore)
+            handleCreateCoffeeStore(initialProps.coffeeStore !== undefined ? initialProps.coffeeStore : "")
         }
     }, [id, initialProps, initialProps.coffeeStore])
 
     const [votingCount, setVoitingCount] = useState(0)
 
-    const fetcher = (...args) => fetch(...args).then(res => res.json())
-    const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher)
-
+    // Check type (...args)
+    const fetcher = (...args: [string]) => {
+        console.log({...args})
+        fetch(...args).then(res => res.json())
+    }
+    // Check data and fetcher types !!!
+    const { data, error } = useSWR<any>(`/api/getCoffeeStoreById?id=${id}`, fetcher)
+    console.log({data})
     useEffect(() => {
         if (data && data.length > 0) {
             setCoffeeStore(data[0])
@@ -136,16 +142,17 @@ const CoffeeStore = (initialProps: { name: string, adress: string, neighbourhood
     }
 
     if (router.isFallback) {
-        return <div>Loaging...</div>
+        return <div>Loading...</div>
     }
-    const { name, city, adress, rating, image_url } = coffeeStore
 
+    const { name, city, adress, rating, image_url }: DestructorStore = coffeeStore
+    // {name: string, city: string, adress:string, rating: number, image_ur: string}
     return (
         <>
             <Head><title>{name}</title></Head>
             <div className={style.layout}>
                 <div className={style.item_content}>
-                    <Link className={style.back_link} href="/">Home Back</Link>
+                    <Link className={style.back_link} href="/"><Image className={style.back_link__icon} src={BackIcon} width={18} height={18} alt={"iconBack"}/>Back</Link>
                     <h1 className={style.item_title}>{name}</h1>
                     <Image className={style.item_image} src={image_url || "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTIzNjF8MHwxfHNlYXJjaHwzfHx0ZWElMjBob3VzZXxlbnwwfDB8fHwxNjg1MDgyOTU4fDA&ixlib=rb-4.0.3&q=80&w=1080"} 
                     alt="Coffee Store" width={500} height={300} />

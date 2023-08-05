@@ -3,19 +3,15 @@
     /* From https://css.glass */
     background: rgba(255, 255, 255, 0.11);
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    
     backdrop-filter: blur(6.7px);
     -webkit-backdrop-filter: blur(6.7px);
     border: 1px solid rgba(255, 255, 255, 0.24);
+    transition: all .35s;
 }
 .cardWrapper:hover{
     /* From https://css.glass */
-    background: rgba(255, 255, 255, 0.32);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(4.7px);
-    -webkit-backdrop-filter: blur(4.7px);
-    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: 0 10px 30px -12px rgb(255, 255, 255);
 }
 .cardTitle{
     margin-bottom: 12px;
