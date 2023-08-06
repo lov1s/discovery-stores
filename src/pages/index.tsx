@@ -66,7 +66,7 @@ export default function Home(props: BasicProps) {
       <div className={styles.wrapper}>
         <div className={styles.titlePage}>
           <div className={styles.btnWrapp}>
-            <h3 className={styles.mainTitle}>Discover tea house near you</h3>
+            <h3 className={styles.mainTitle}>Discover Coffee shops and Tea houses near you</h3>
             <button className={styles.findButton} onClick={handleOnBtnClick}>{isFindingLocation ? "Locating..." : "Near me"}</button>
           </div>
           {locationErrorMsg && <p>Something wrong: {locationErrorMsg}</p>}
@@ -86,7 +86,7 @@ export default function Home(props: BasicProps) {
           )}
           {props.coffeeStores.length > 0 && (
             <>
-              <div><h2 className={styles.elementTitle}>Coffee shops</h2></div>
+              <div><h2 className={styles.elementTitle}>Coffee shops and Tea houses</h2></div>
               <div className={styles.cardLayout}>
                 {props.coffeeStores.map((coffeeStore: CoffeeStores) => {
                   return (

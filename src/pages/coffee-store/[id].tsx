@@ -8,8 +8,10 @@ import { useContext, useEffect, useState } from "react"
 import { StoreContext } from "@/store/store-context"
 import { isEmpty } from "@/utils"
 import useSWR from "swr"
-import {CoffeeStore, DestructorStore, StaticProps} from "@/interfaces/interfaces";
-import BackIcon from "@/assets/arrow_back.svg"
+import {CoffeeStore, StaticProps} from "@/interfaces/interfaces";
+import BackIcon from "@/assets/arrow_back.svg";
+
+
 export async function getStaticPaths() {
     const coffeeStores = await fetchCoffeeStores();
     const paths = coffeeStores.map((coffeeStore: CoffeeStore) => {
@@ -97,7 +99,6 @@ const CoffeeStore = (initialProps: { coffeeStore?: CoffeeStore }) => {
 
     // Check type (...args)
     const fetcher = (...args: [string]) => {
-        console.log({...args})
         fetch(...args).then(res => res.json())
     }
     // Check data and fetcher types !!!
