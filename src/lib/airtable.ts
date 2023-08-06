@@ -1,4 +1,4 @@
-interface Irecord {
+interface IRecord {
     id: string,
     fields: {}
 }
@@ -9,9 +9,9 @@ Airtable.configure({
     apiKey: process.env.AIRTABLE_API_KEY
 });
 const base = Airtable.base(process.env.AIRTABLE_BASE_KEY);
-const table = base("stores")
+const table = base("Projects")
 
-const getMinifiedRecord = (record: Irecord) => {
+const getMinifiedRecord = (record: IRecord) => {
     return {
         recordId: record.id,
         ...record.fields,
