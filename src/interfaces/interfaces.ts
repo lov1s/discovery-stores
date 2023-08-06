@@ -11,7 +11,7 @@ export interface CoffeeStore extends BasicStore{
     id: number,
     name: string,
     adress: string,
-    neighbourhood: string,
+    neighbourhood?: string,
     image_url: string,
     rating?: number,
     locality?: string

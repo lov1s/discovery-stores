@@ -1,6 +1,7 @@
-import { findRecordByFilter, getMinifiedRecords, table } from "@/lib/airtable"
+import { findRecordByFilter, getMinifiedRecords, table } from "@/lib/airtable";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const createCoffeeStore = async (req, res) => {
+const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "POST") {
         const { id, name, adress, locality, rating, image_url } = req.body
         try {

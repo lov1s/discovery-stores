@@ -1,3 +1,8 @@
+interface Irecord {
+    id: string,
+    fields: {}
+}
+
 const Airtable = require('airtable');
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
@@ -6,13 +11,13 @@ Airtable.configure({
 const base = Airtable.base(process.env.AIRTABLE_BASE_KEY);
 const table = base("stores")
 
-const getMinifiedRecord = (record) => {
+const getMinifiedRecord = (record: Irecord) => {
     return {
         recordId: record.id,
         ...record.fields,
     }
 }
-const getMinifiedRecords = (records) => {
+const getMinifiedRecords = (records: []) => {
     return records.map(record => getMinifiedRecord(record))
 }
 

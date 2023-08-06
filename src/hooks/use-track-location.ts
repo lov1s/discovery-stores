@@ -1,5 +1,12 @@
 import { ACTION_TYPES, StoreContext } from "@/store/store-context"
-import { useContext, useState } from "react"
+import { Dispatch, useContext, useState } from "react"
+
+interface IPosition {
+    coords: {
+        latitude: number,
+        longitude: number
+    }
+}
 
 const useTrackLocation = () => {
     const [locationErrorMsg, setLocationErrorMsg] = useState("")
@@ -8,7 +15,7 @@ const useTrackLocation = () => {
 
     const {dispatch} = useContext(StoreContext)
 
-    const success = (position) => {
+    const success = (position: IPosition) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 

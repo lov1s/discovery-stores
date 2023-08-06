@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import coffeeStoresData from '../../data/coffee-stores.json'
 import Head from "next/head"
 import Image from 'next/image'
 import style from './coffeeStore.module.css'
@@ -9,7 +8,7 @@ import { useContext, useEffect, useState } from "react"
 import { StoreContext } from "@/store/store-context"
 import { isEmpty } from "@/utils"
 import useSWR from "swr"
-import {CoffeeStore, CoffeeStores, DestructorStore, StaticProps} from "@/interfaces/interfaces";
+import {CoffeeStore, DestructorStore, StaticProps} from "@/interfaces/interfaces";
 import BackIcon from "@/assets/arrow_back.svg"
 export async function getStaticPaths() {
     const coffeeStores = await fetchCoffeeStores();
@@ -36,12 +35,12 @@ export async function getStaticProps(staticProps: StaticProps) {
         }
     }
 }
-const CoffeeStore = (initialProps: CoffeeStore) => {
+const CoffeeStore = (initialProps: { coffeeStore?: CoffeeStore }) => {
 
     const router = useRouter()
     const id = router.query.id
 
-    const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore || {})
+    const [coffeeStore, setCoffeeStore] = useState<CoffeeStore | undefined>(initialProps.coffeeStore);
 
     const {
         state: { coffeeStores },
@@ -77,7 +76,7 @@ const CoffeeStore = (initialProps: CoffeeStore) => {
         }
     }
     useEffect(() => {
-        if (isEmpty(initialProps.coffeeStore)) {
+        if (isEmpty(initialProps.coffeeStore!)) {
             if (coffeeStores.length > 0) {
                 const coffeStoreFromContext = coffeeStores.find((coffeeStore: CoffeeStore) => {
                     return coffeeStore.id.toString() === id
@@ -90,7 +89,7 @@ const CoffeeStore = (initialProps: CoffeeStore) => {
             }
         } else {
             //SSG
-            handleCreateCoffeeStore(initialProps.coffeeStore !== undefined ? initialProps.coffeeStore : "")
+            handleCreateCoffeeStore(initialProps.coffeeStore!);
         }
     }, [id, initialProps, initialProps.coffeeStore])
 
@@ -103,7 +102,6 @@ const CoffeeStore = (initialProps: CoffeeStore) => {
     }
     // Check data and fetcher types !!!
     const { data, error } = useSWR<any>(`/api/getCoffeeStoreById?id=${id}`, fetcher)
-    console.log({data})
     useEffect(() => {
         if (data && data.length > 0) {
             setCoffeeStore(data[0])
@@ -145,7 +143,7 @@ const CoffeeStore = (initialProps: CoffeeStore) => {
         return <div>Loading...</div>
     }
 
-    const { name, city, adress, rating, image_url }: DestructorStore = coffeeStore
+    const { name, locality, adress, rating, image_url } = coffeeStore || {};
     // {name: string, city: string, adress:string, rating: number, image_ur: string}
     return (
         <>
@@ -159,7 +157,7 @@ const CoffeeStore = (initialProps: CoffeeStore) => {
                 </div>
                 <div className={style.item_interaction}>
                     <p className={style.address}>{adress}</p>
-                    <p className={style.neighbourhood}>{city}</p>
+                    <p className={style.neighbourhood}>{locality}</p>
                     <p className={style.rating}>{votingCount}</p>
                     <button onClick={handleUpvoteButton} className={style.voteBtn}>Up vote</button>
                 </div>

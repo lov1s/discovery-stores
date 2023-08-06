@@ -3,9 +3,6 @@
     justify-content: center;
     flex-direction: column;
 }
-.item_content{
-    
-}
 .back_link{
     max-width: 120px;
     display: flex;

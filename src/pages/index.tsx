@@ -38,6 +38,7 @@ export default function Home(props: BasicProps) {
   const [coffeeStoresError, setCoffeeStoresError] = useState<string | null>(null)
 
   const { dispatch, state } = useContext(StoreContext)
+  //@ts-ignore
   const { coffeeStores, latLong, limit } = state
 
   useEffect(() => {
