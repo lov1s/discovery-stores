@@ -2,11 +2,10 @@ import { findRecordByFilter } from "@/lib/airtable";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const getCoffeeStoreById = async (req: NextApiRequest, res: NextApiResponse) => {
-  const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
+  const { id } = req.query;
 
   try {
     if (id) {
-      
       const records = await findRecordByFilter(id);
 
       if (records.length !== 0) {
