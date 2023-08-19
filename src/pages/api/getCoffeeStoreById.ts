@@ -3,9 +3,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const getCoffeeStoreById = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
-
+  
   try {
     if (id) {
+      // @ts-ignore
       const records = await findRecordByFilter(id);
 
       if (records.length !== 0) {
